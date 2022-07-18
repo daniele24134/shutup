@@ -1,12 +1,14 @@
 import { PrismaClient } from '@prisma/client';
 import express from 'express';
 import 'dotenv/config';
+import router from './router';
 
 const prisma = new PrismaClient();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(router);
 
 let server;
 async function main() {
