@@ -1,6 +1,23 @@
 import { Request, Response } from 'express';
 import prisma from '..';
 
+const getChat = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const chat = await prisma.chat.findUnique({
+      where: {
+        id: +id,
+      },
+      include: {
+        messages: true,
+      },
+    });
+    res.send(chat);
+  } catch (error: any) {
+    console.error(error.message);
+  }
+};
+
 const createChat = async (req: Request, res: Response) => {
   try {
     const { ids }: { ids: number[] } = req.body;
@@ -80,4 +97,10 @@ const deleteChat = async (req: Request, res: Response) => {
   }
 };
 
-export default { createChat, addUsersToChat, deleteUsersToChat, deleteChat };
+export default {
+  createChat,
+  addUsersToChat,
+  deleteUsersToChat,
+  deleteChat,
+  getChat,
+};

@@ -21,5 +21,6 @@ router.post('/chats', chatsController.createChat);
 router.put('/chats/add/:id', chatsController.addUsersToChat);
 router.put('/chats/remove/:id', chatsController.deleteUsersToChat);
 router.delete('/chats/:id', chatsController.deleteChat);
+router.get('/chats/:id', chatsController.getChat);
 
 export default router;

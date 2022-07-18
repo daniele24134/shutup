@@ -26,7 +26,11 @@ const getUser = async (req: Request, res: Response) => {
         id: +id,
       },
       include: {
-        chats: true,
+        chats: {
+          include: {
+            users: true,
+          },
+        },
       },
     });
     res.send(user);
