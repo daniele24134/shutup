@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import prisma from '..';
+import { prisma } from '..';
 
 const getChat = async (req: Request, res: Response) => {
   try {

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import prisma from '..';
+import { prisma } from '..';
 
 type MessageType = {
   chatId: number;
