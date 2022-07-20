@@ -2,9 +2,9 @@ import { Request, Response } from 'express';
 import { prisma } from '..';
 
 type MessageType = {
-  chatId: number;
+  chatId: string;
   content: string;
-  authorId: number;
+  authorId: string;
 };
 
 const createMessage = async (req: Request, res: Response) => {
@@ -32,7 +32,7 @@ const updateMessage = async (req: Request, res: Response) => {
         content,
       },
       where: {
-        id: +id,
+        id,
       },
     });
     res.send(message);
@@ -46,7 +46,7 @@ const deleteMessage = async (req: Request, res: Response) => {
     const { id } = req.params;
     const message = await prisma.message.delete({
       where: {
-        id: +id,
+        id,
       },
     });
     res.send(message);

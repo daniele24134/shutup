@@ -6,7 +6,7 @@ const getAllChats = async (req: Request, res: Response) => {
     const { id } = req.params;
     const chats = await prisma.user.findMany({
       where: {
-        id: +id,
+        id,
       },
       select: {
         chats: true,
@@ -23,7 +23,7 @@ const getUser = async (req: Request, res: Response) => {
     const { id } = req.params;
     const user = await prisma.user.findMany({
       where: {
-        id: +id,
+        id,
       },
       include: {
         chats: {
@@ -62,7 +62,7 @@ const updateUser = async (req: Request, res: Response) => {
     const userData = req.body;
     const { id } = req.params;
     const user = await prisma.user.update({
-      where: { id: +id },
+      where: { id },
       data: userData,
       include: {
         chats: true,
@@ -77,7 +77,7 @@ const updateUser = async (req: Request, res: Response) => {
 const deleteUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const user = await prisma.user.delete({ where: { id: +id } });
+    const user = await prisma.user.delete({ where: { id } });
     res.send(user);
   } catch (error: any) {
     console.error(error.message);

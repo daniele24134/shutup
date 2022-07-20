@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import { prisma } from '..';
+import { ChatType } from '../types/@types';
 
 const getChat = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const chat = await prisma.chat.findUnique({
       where: {
-        id: +id,
+        id,
       },
       include: {
         messages: true,
@@ -20,9 +21,9 @@ const getChat = async (req: Request, res: Response) => {
 
 const createChat = async (req: Request, res: Response) => {
   try {
-    const { ids }: { ids: number[] } = req.body;
+    const { ids }: ChatType = req.body;
     const userIds = ids.map((id) => {
-      return { id: +id };
+      return { id };
     });
     const chat = await prisma.chat.create({
       data: {
@@ -39,9 +40,9 @@ const createChat = async (req: Request, res: Response) => {
 
 const addUsersToChat = async (req: Request, res: Response) => {
   try {
-    const { ids }: { ids: number[] } = req.body;
+    const { ids }: ChatType = req.body;
     const userIds = ids.map((id) => {
-      return { id: +id };
+      return { id };
     });
     const { id } = req.params;
     const chat = await prisma.chat.update({
@@ -51,7 +52,7 @@ const addUsersToChat = async (req: Request, res: Response) => {
         },
       },
       where: {
-        id: +id,
+        id,
       },
     });
     res.send(chat);
@@ -62,9 +63,9 @@ const addUsersToChat = async (req: Request, res: Response) => {
 
 const deleteUsersToChat = async (req: Request, res: Response) => {
   try {
-    const { ids }: { ids: number[] } = req.body;
+    const { ids }: ChatType = req.body;
     const userIds = ids.map((id) => {
-      return { id: +id };
+      return { id };
     });
     const { id } = req.params;
     const chat = await prisma.chat.update({
@@ -74,7 +75,7 @@ const deleteUsersToChat = async (req: Request, res: Response) => {
         },
       },
       where: {
-        id: +id,
+        id,
       },
     });
     res.send(chat);
@@ -88,7 +89,7 @@ const deleteChat = async (req: Request, res: Response) => {
     const { id } = req.params;
     const chat = await prisma.chat.delete({
       where: {
-        id: +id,
+        id,
       },
     });
     res.send(chat);
