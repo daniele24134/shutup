@@ -3,8 +3,12 @@ import { prisma } from '..';
 import { MessageType, ChatType } from '../types/@types';
 
 export default function (socket: Socket) {
-  socket.on('join-room', (chatId) => {
+  socket.on('join-chat', (chatId) => {
     socket.join(chatId);
+  });
+
+  socket.on('join-id', (id) => {
+    socket.join(id);
   });
 
   socket.on('save-message', async (data: MessageType) => {
