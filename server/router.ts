@@ -7,7 +7,9 @@ import chatsController from './controllers/chat_controller';
 
 // users
 router.get('/users/:id', usersController.getUser);
+router.get('/users/username/:username', usersController.getUserByUsername);
 router.post('/users', usersController.createUser);
+router.post('/users/login', usersController.login);
 router.put('/users/:id', usersController.updateUser);
 router.delete('/users/:id', usersController.deleteUser);
 

@@ -28,7 +28,12 @@ const getUser = async (req: Request, res: Response) => {
       include: {
         chats: {
           include: {
-            users: true,
+            users: {
+              select: {
+                id: true,
+                username: true,
+              },
+            },
           },
         },
       },
@@ -84,4 +89,56 @@ const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
-export default { getAllChats, getUser, createUser, updateUser, deleteUser };
+const getUserByUsername = async (req: Request, res: Response) => {
+  try {
+    const { username } = req.params;
+    const user = await prisma.user.findUnique({
+      where: { username },
+      select: {
+        username: true,
+        id: true,
+      },
+    });
+    res.send(user);
+  } catch (error: any) {
+    console.error(error.message);
+  }
+};
+
+const login = async (req: Request, res: Response) => {
+  try {
+    const { username, password } = req.body;
+    const user = await prisma.user.findUnique({
+      where: { username },
+      include: {
+        chats: {
+          include: {
+            users: {
+              select: {
+                id: true,
+                username: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    if (user?.password === password) {
+      res.send(user);
+    } else {
+      throw new Error('wrong credentials');
+    }
+  } catch (error: any) {
+    console.error(error.message);
+  }
+};
+
+export default {
+  getAllChats,
+  getUser,
+  createUser,
+  updateUser,
+  deleteUser,
+  getUserByUsername,
+  login,
+};

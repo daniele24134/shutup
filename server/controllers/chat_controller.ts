@@ -11,6 +11,12 @@ const getChat = async (req: Request, res: Response) => {
       },
       include: {
         messages: true,
+        users: {
+          select: {
+            username: true,
+            id: true,
+          },
+        },
       },
     });
     res.send(chat);
@@ -29,6 +35,15 @@ const createChat = async (req: Request, res: Response) => {
       data: {
         users: {
           connect: userIds,
+        },
+      },
+      include: {
+        messages: true,
+        users: {
+          select: {
+            username: true,
+            id: true,
+          },
         },
       },
     });
