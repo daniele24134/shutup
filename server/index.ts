@@ -3,6 +3,7 @@ import express from 'express';
 import 'dotenv/config';
 import router from './router';
 import sockets from './controllers';
+import cors from 'cors';
 
 const app = express();
 const server = require('http').createServer(app);
@@ -12,6 +13,7 @@ const io = new Server(server, { cors: { origin: '*' } });
 const PORT = process.env.PORT || 3000;
 const prisma = new PrismaClient();
 
+app.use(cors());
 app.use(express.json());
 app.use(router);
 

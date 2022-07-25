@@ -1,5 +1,6 @@
 import {
   ActionReducerMapBuilder,
+  AnyAction,
   createAsyncThunk,
   createSlice,
   PayloadAction,
@@ -31,19 +32,13 @@ export const signup = createAsyncThunk(
   }
 );
 
-export const login = createAsyncThunk(
-  'user/login',
-  async (credentials: { username: string; password: string }) => {
-    try {
-      const { username, password } = credentials;
-      const response = await loginUser(username, password);
-      // The value we return becomes the `fulfilled` action payload
-      return response;
-    } catch (error: any) {
-      return error.message;
-    }
-  }
-);
+export const loginAsync =
+  (credentials: { username: string; password: string }): AppThunk =>
+  async (dispatch) => {
+    const { username, password } = credentials;
+    const response = await loginUser(username, password);
+    dispatch(login(response));
+  };
 
 export const userSlice = createSlice({
   name: 'user',
@@ -53,8 +48,15 @@ export const userSlice = createSlice({
     // Use the PayloadAction type to declare the contents of `action.payload`
 
     logout: (state) => {
+      console.log('logout');
       state = initialState;
     },
+
+    login: (state, action) => {
+      state.isLogged = true;
+      state.value = action.payload;
+    },
+
     addChat: (state, action) => {
       state.value.chats?.push(action.payload);
     },
@@ -75,21 +77,11 @@ export const userSlice = createSlice({
       })
       .addCase(signup.rejected, (state) => {
         state.isLogged = false;
-      })
-      .addCase(login.pending, (state) => {
-        state.isLogged = false;
-      })
-      .addCase(login.fulfilled, (state, action) => {
-        state.isLogged = true;
-        state.value = action.payload;
-      })
-      .addCase(login.rejected, (state) => {
-        state.isLogged = false;
       });
   },
 });
 
-export const { logout, addChat, deleteChat } = userSlice.actions;
+export const { logout, addChat, deleteChat, login } = userSlice.actions;
 export const isLogged = (state: RootState) => state.user.isLogged;
 export const currentUser = (state: RootState) => state.user.value;
 export const userReducer = userSlice.reducer;
