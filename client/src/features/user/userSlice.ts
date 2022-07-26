@@ -1,11 +1,5 @@
-import {
-  ActionReducerMapBuilder,
-  AnyAction,
-  createAsyncThunk,
-  createSlice,
-  PayloadAction,
-} from '@reduxjs/toolkit';
-import { UserType } from '../../@types';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ChatType, UserType } from '../../@types';
 import { RootState, AppThunk } from '../../app/store';
 import { createUser, loginUser } from '../../services/userService';
 
@@ -19,45 +13,41 @@ const initialState: UserState = {
   isLogged: false,
 };
 
-export const signup = createAsyncThunk(
-  'user/signup',
-  async (user: UserType) => {
-    try {
-      const response = await createUser(user);
-      // The value we return becomes the `fulfilled` action payload
-      return response;
-    } catch (error: any) {
-      return error.message;
-    }
-  }
-);
-
+// thunks
 export const loginAsync =
   (credentials: { username: string; password: string }): AppThunk =>
   async (dispatch) => {
     const { username, password } = credentials;
     const response = await loginUser(username, password);
-    dispatch(login(response));
+    if (response) {
+      dispatch(login(response));
+    } else {
+      console.log('not logged');
+    }
+  };
+
+export const signupAsync =
+  (credentials: { username: string; password: string }): AppThunk =>
+  async (dispatch) => {
+    const response = await createUser(credentials);
+    if (response) dispatch(login(response));
   };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    // Use the PayloadAction type to declare the contents of `action.payload`
-
     logout: (state) => {
       console.log('logout');
-      state = initialState;
+      state.isLogged = false;
+      state.value = { username: '', password: '', chats: [] };
     },
-
-    login: (state, action) => {
+    login: (state, action: PayloadAction<UserType>) => {
       state.isLogged = true;
       state.value = action.payload;
+      console.log(state.isLogged);
     },
-
-    addChat: (state, action) => {
+    addChat: (state, action: PayloadAction<ChatType>) => {
       state.value.chats?.push(action.payload);
     },
     deleteChat: (state, action: PayloadAction<string>) => {
@@ -65,19 +55,6 @@ export const userSlice = createSlice({
         (c) => c.id !== action.payload
       );
     },
-  },
-  extraReducers: (builder: ActionReducerMapBuilder<UserState>) => {
-    builder
-      .addCase(signup.pending, (state) => {
-        state.isLogged = false;
-      })
-      .addCase(signup.fulfilled, (state, action) => {
-        state.isLogged = true;
-        state.value = action.payload;
-      })
-      .addCase(signup.rejected, (state) => {
-        state.isLogged = false;
-      });
   },
 });
 

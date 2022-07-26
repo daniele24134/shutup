@@ -1,13 +1,16 @@
+import { getUserByUsername } from './userService';
+
 const server_url = process.env.REACT_APP_SERVER_URL || '';
 
-export const createChat = async (ids: string[]) => {
+export const createChat = async (id: string, username: string) => {
   try {
+    const user = await getUserByUsername(username);
     const result = await fetch(server_url + '/chats', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
       },
-      body: JSON.stringify(ids),
+      body: JSON.stringify({ ids: [id, user.id] }),
     });
     if (result.ok) {
       const data = await result.json();

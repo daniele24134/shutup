@@ -129,6 +129,7 @@ const login = async (req: Request, res: Response) => {
       throw new Error('wrong credentials');
     }
   } catch (error: any) {
+    res.status(400).send(error.message);
     console.error(error.message);
   }
 };

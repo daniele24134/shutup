@@ -1,13 +1,17 @@
-import React, { useEffect } from 'react';
-import './App.css';
 import { useAppSelector } from './app/hooks';
-import { Dashboard } from './pages/DashBoard';
-import { NotLogged } from './pages/NotLogged';
+import Dashboard from './pages/DashBoard';
+import { Navigate } from 'react-router-dom';
+import { GLobalStyles } from './Global.style';
 
 function App() {
   const isLogged = useAppSelector((state) => state.user.isLogged);
-
-  return isLogged ? <Dashboard /> : <NotLogged />;
+  console.log(isLogged);
+  return (
+    <>
+      <GLobalStyles />
+      {isLogged ? <Dashboard /> : <Navigate to='login' />}
+    </>
+  );
 }
 
 export default App;

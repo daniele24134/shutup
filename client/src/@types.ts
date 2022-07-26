@@ -20,3 +20,7 @@ export type UserType = {
   chats?: ChatType[];
   message?: MessageType[];
 };
+
+export type ClassNameType = {
+  className?: string;
+};

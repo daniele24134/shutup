@@ -47,12 +47,11 @@ export const loginUser = async (username: string, password: string) => {
     });
 
     if (result.ok) {
-      const data = await result.json();
-      return data;
+      return await result.json();
     } else {
       throw new Error('Something went wrong during the log in');
     }
   } catch (error: any) {
-    console.log(error.message);
+    console.log(error);
   }
 };
