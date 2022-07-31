@@ -1,6 +1,9 @@
-import React from 'react';
-import { useAppSelector } from '../app/hooks';
+import React, { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import styled from 'styled-components';
+import ChatItem from './ChatItem';
+import { receiveChat, socket } from '../services/socketService';
+import { ChatType } from '../@types';
 
 type ChatLisType = {
   className?: string;
@@ -9,14 +12,21 @@ type ChatLisType = {
 
 const ChatList: React.FC<ChatLisType> = ({ className, userId }) => {
   const user = useAppSelector((state) => state.user.value);
+  const dispatch = useAppDispatch();
+
+  useEffect((): any => {
+    if (!socket) return;
+    socket.on('receive-chat', (chat: ChatType) => {
+      receiveChat(dispatch, chat);
+    });
+
+    return () => socket.off('receive-chat');
+  }, [socket]);
 
   const chatlist = user.chats?.map((chat) => {
-    return (
-      <li key={chat.id}>
-        {chat.users.filter((u) => u.id !== userId)[0]?.username}
-      </li>
-    );
+    return <ChatItem key={chat.id} chat={chat} userId={userId} />;
   });
+
   const nochat = <div>You have no chat yet</div>;
 
   return (
@@ -28,20 +38,4 @@ export default styled(ChatList)`
   margin-top: 30px;
   overflow-y: auto;
   width: 100%;
-
-  & li {
-    height: 70px;
-    border-bottom: 0.8px solid gray;
-    border-top: 0.8px solid gray;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    width: inherit;
-    padding: 20px;
-    font-size: 20px;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-  }
 `;

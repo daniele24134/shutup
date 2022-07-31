@@ -20,12 +20,8 @@ const Header: React.FC<HeaderProps> = ({ className, username }) => {
 };
 
 export default styled(Header)`
-  background: rgb(217, 100, 95);
-  background: linear-gradient(
-    0deg,
-    rgba(217, 100, 95, 1) 0%,
-    rgba(241, 158, 143, 1) 78%
-  );
+  background: coral;
+  background: linear-gradient(0deg, coral 0%, rgba(241, 158, 143, 1) 78%);
   display: flex;
   justify-content: space-between;
   height: 60px;

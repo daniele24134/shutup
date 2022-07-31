@@ -3,7 +3,8 @@ import { createChat } from '../services/chatService';
 import { useAppDispatch } from '../app/hooks';
 import { addChat } from '../features/user/userSlice';
 import styled from 'styled-components';
-import { ChatType, ClassNameType } from '../@types';
+import { ChatType, ClassNameType, UserType } from '../@types';
+import { sendChat } from '../services/socketService';
 
 interface AddChatProps extends ClassNameType {
   userId: string;
@@ -18,6 +19,8 @@ const AddChat: React.FC<AddChatProps> = ({ className, userId }) => {
       const chat: ChatType = await createChat(userId, username);
       if (chat.id) {
         dispatch(addChat(chat));
+        const otherId = chat.users.find((u: UserType) => u.id !== userId);
+        if (otherId?.id) sendChat(chat, otherId.id);
       }
     }
     setUsername('');

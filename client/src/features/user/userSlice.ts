@@ -30,7 +30,11 @@ export const signupAsync =
   (credentials: { username: string; password: string }): AppThunk =>
   async (dispatch) => {
     const response = await createUser(credentials);
-    if (response) dispatch(login(response));
+    if (response) {
+      dispatch(login(response));
+    } else {
+      console.log('user not created');
+    }
   };
 
 export const userSlice = createSlice({

@@ -40,7 +40,7 @@ img {
 a {
 	color: black;
 	text-decoration: none;
-  display: block;
+  display: inline-block;
 }
 
 

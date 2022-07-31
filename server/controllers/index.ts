@@ -3,12 +3,25 @@ import { prisma } from '..';
 import { MessageType, ChatType } from '../types/@types';
 
 export default function (socket: Socket) {
-  socket.on('join-chat', (chatId) => {
-    socket.join(chatId);
+  socket.on('join-chats', (chatIds) => {
+    chatIds.forEach((id: string) => {
+      socket.join(id);
+    });
   });
 
-  socket.on('join-id', (id) => {
-    socket.join(id);
+  socket.on('join-currentID', (userID: string) => {
+    console.log('join id', userID);
+    socket.join(userID);
+  });
+
+  socket.on('join-chat', (chatId) => {
+    socket.join(chatId);
+    console.log('join chat');
+  });
+
+  socket.on('send-chat', (chat, userId) => {
+    console.log('send chat', userId);
+    socket.broadcast.to(userId).emit('receive-chat', chat);
   });
 
   socket.on('save-message', async (data: MessageType) => {
@@ -21,7 +34,7 @@ export default function (socket: Socket) {
           content,
         },
       });
-      socket.to(chatId).emit('send-message', message);
+      socket.broadcast.to(chatId).emit('send-message', message);
     } catch (error: any) {
       console.error(error.message);
     }
