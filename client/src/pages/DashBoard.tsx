@@ -5,7 +5,8 @@ import ChatList from '../components/ChatList';
 import AddChat from '../components/AddChat';
 import styled from 'styled-components';
 import { ClassNameType } from '../@types';
-import { socketInit, socket } from '../services/socketService';
+import { socketInit } from '../services/socketService';
+import { Outlet } from 'react-router-dom';
 
 const Dashboard: React.FC<ClassNameType> = ({ className }) => {
   const user = useAppSelector((state) => state.user.value);
@@ -22,7 +23,9 @@ const Dashboard: React.FC<ClassNameType> = ({ className }) => {
           <AddChat userId={user.id!} />
           <ChatList userId={user.id!} />
         </aside>
-        <section></section>
+        <section>
+          <Outlet />
+        </section>
       </main>
     </div>
   );
@@ -37,11 +40,15 @@ export default styled(Dashboard)`
       display: flex;
       flex-direction: column;
       align-items: center;
+      -webkit-box-shadow: 6px 1px 19px -9px #656565;
+      -moz-box-shadow: 6px 1px 19px -9px #656565;
+      -o-box-shadow: 6px 1px 19px -9px #656565;
+      box-shadow: 6px 1px 19px -9px #656565;
+      z-index: 10;
     }
 
     & section {
       height: calc(100vh - 60px);
-      background-color: coral;
       width: 100%;
     }
   }

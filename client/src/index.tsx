@@ -9,6 +9,8 @@ import NotLogged from './pages/NotLogged';
 import { GLobalStyles } from './Global.style';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import NoChat from './components/NoChat';
+import Chat from './components/Chat';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
@@ -20,7 +22,10 @@ root.render(
         <BrowserRouter>
           <GLobalStyles />
           <Routes>
-            <Route path='/' element={<App />}></Route>
+            <Route path='/' element={<App />}>
+              <Route index element={<NoChat />} />
+              <Route path=':id' element={<Chat />} />
+            </Route>
             <Route path='login' element={<NotLogged />}>
               <Route index element={<Login />} />
               <Route path='signup' element={<Signup />} />

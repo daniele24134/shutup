@@ -10,21 +10,18 @@ export default function (socket: Socket) {
   });
 
   socket.on('join-currentID', (userID: string) => {
-    console.log('join id', userID);
     socket.join(userID);
   });
 
   socket.on('join-chat', (chatId) => {
     socket.join(chatId);
-    console.log('join chat');
   });
 
   socket.on('send-chat', (chat, userId) => {
-    console.log('send chat', userId);
     socket.broadcast.to(userId).emit('receive-chat', chat);
   });
 
-  socket.on('save-message', async (data: MessageType) => {
+  socket.on('send-message', async (data: MessageType) => {
     try {
       const { content, chatId, authorId }: MessageType = data;
       const message = await prisma.message.create({
@@ -34,7 +31,7 @@ export default function (socket: Socket) {
           content,
         },
       });
-      socket.broadcast.to(chatId).emit('send-message', message);
+      socket.broadcast.to(chatId).emit('receive-message', message);
     } catch (error: any) {
       console.error(error.message);
     }

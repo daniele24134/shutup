@@ -40,12 +40,17 @@ const AddChat: React.FC<AddChatProps> = ({ className, userId }) => {
 };
 
 export default styled(AddChat)`
-  margin-top: 20px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+
   & input {
     padding: 5px;
     border-radius: 15px;
     margin-right: 5px;
     padding-left: 10px;
+    border: solid 1px black;
+
     &:active &:focus {
       border: none;
       outline: none;
@@ -58,7 +63,7 @@ export default styled(AddChat)`
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    border: 1.5px solid white;
+    border: 1px solid black;
     background-color: transparent;
     transition: all 300ms ease;
     cursor: pointer;

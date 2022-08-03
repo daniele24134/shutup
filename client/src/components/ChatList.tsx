@@ -35,7 +35,6 @@ const ChatList: React.FC<ChatLisType> = ({ className, userId }) => {
 };
 
 export default styled(ChatList)`
-  margin-top: 30px;
   overflow-y: auto;
   width: 100%;
 `;

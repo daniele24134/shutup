@@ -1,6 +1,9 @@
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { ChatType, ClassNameType } from '../@types';
+import { useAppDispatch } from '../app/hooks';
+import { getChatAsync, init } from '../features/chat/chatSlice';
 
 interface ChatItemProps extends ClassNameType {
   chat: ChatType;
@@ -8,8 +11,16 @@ interface ChatItemProps extends ClassNameType {
 }
 
 const ChatItem: React.FC<ChatItemProps> = ({ className, chat, userId }) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    dispatch(getChatAsync(chat.id!));
+    navigate(chat.id!);
+  };
+
   return (
-    <li className={className}>
+    <li className={className} onClick={handleClick}>
       {chat.users.filter((u) => u.id !== userId)[0]?.username}
     </li>
   );
@@ -17,7 +28,6 @@ const ChatItem: React.FC<ChatItemProps> = ({ className, chat, userId }) => {
 
 export default styled(ChatItem)`
   height: 70px;
-  border-bottom: 0.8px solid gray;
   border-top: 0.8px solid gray;
   display: flex;
   align-items: center;
@@ -25,8 +35,9 @@ export default styled(ChatItem)`
   width: inherit;
   padding: 20px;
   font-size: 20px;
+  transition: all ease 300ms;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background-color: #facbba;
   }
 `;
