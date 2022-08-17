@@ -58,6 +58,7 @@ export default styled(ChatInput)`
 
   padding: 20px;
   width: 100%;
+  height: 80px;
   & input[type='text'] {
     width: 70%;
     border-radius: 10px;

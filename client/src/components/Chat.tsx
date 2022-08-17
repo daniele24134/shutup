@@ -22,7 +22,4 @@ const Chat: React.FC<ClassNameType> = ({ className }) => {
   );
 };
 
-export default styled(Chat)`
-  width: 100px;
-  height: 100px;
-`;
+export default styled(Chat)``;

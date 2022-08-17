@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ChatType, MessageType } from '../../@types';
 import { AppThunk } from '../../app/store';
 import { getChat } from '../../services/chatService';
+import { createMessage } from '../../services/messageService';
 import { createUser } from '../../services/userService';
 import { login } from '../user/userSlice';
 
@@ -15,16 +16,6 @@ const initialState: ChatState = {
     users: [],
   },
 };
-export const getChatAsync =
-  (id: string): AppThunk =>
-  async (dispatch) => {
-    const response = await getChat(id);
-    if (response) {
-      dispatch(init(response));
-    } else {
-      console.log('chat not fetched');
-    }
-  };
 
 export const chatSlice = createSlice({
   name: 'chat',
@@ -38,6 +29,28 @@ export const chatSlice = createSlice({
     },
   },
 });
+
+export const getChatAsync =
+  (id: string): AppThunk =>
+  async (dispatch) => {
+    const response = await getChat(id);
+    if (response) {
+      dispatch(init(response));
+    } else {
+      console.log('chat not fetched');
+    }
+  };
+
+export const createMessageAsync = (message: MessageType): AppThunk => {
+  return async (dispatch) => {
+    const response = await createMessage(message);
+    if (response) {
+      dispatch(addMessage(response));
+    } else {
+      console.log('message not created');
+    }
+  };
+};
 
 export const { addMessage, init } = chatSlice.actions;
 

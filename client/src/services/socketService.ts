@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 import { ChatType, MessageType, UserType } from '../@types';
 import { AppDispatch } from '../app/store';
-import { addMessage } from '../features/chat/chatSlice';
+import { addMessage, createMessageAsync } from '../features/chat/chatSlice';
 import { addChat } from '../features/user/userSlice';
 const server_url = process.env.REACT_APP_SERVER_URL || '';
 
@@ -34,7 +34,7 @@ export const receiveChat = (dispatch: AppDispatch, chat: ChatType) => {
 
 export const sendMessage = (dispatch: AppDispatch, message: MessageType) => {
   socket.emit('send-message', message);
-  dispatch(addMessage(message));
+  dispatch(createMessageAsync(message));
 };
 
 export const receiveMessage = (dispatch: AppDispatch, message: MessageType) => {
