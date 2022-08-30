@@ -26,6 +26,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({ className, messages }) => {
 
 export default styled(ChatMessages)`
   padding: 30px;
-  height: 84vh;
+  height: 70vh;
   overflow-y: auto;
+
 `;
