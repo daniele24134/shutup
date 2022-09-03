@@ -30,6 +30,13 @@ export default function (socket: Socket) {
           authorId,
           content,
         },
+        include: {
+          chat: {
+            include: {
+              users: true
+            }
+          }
+        }
       });
       socket.broadcast.to(chatId).emit('receive-message', message);
     } catch (error: any) {

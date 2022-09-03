@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { ChatType, ClassNameType } from '../@types';
+import { ChatType, ClassNameType, MessageType } from '../@types';
 import { useAppDispatch } from '../app/hooks';
 import { getChatAsync, init } from '../features/chat/chatSlice';
+import { unshiftChat } from '../features/user/userSlice';
+import { receiveMessage, sendMessage, socket } from '../services/socketService';
 
 interface ChatItemProps extends ClassNameType {
   chat: ChatType;
@@ -21,7 +23,7 @@ const ChatItem: React.FC<ChatItemProps> = ({ className, chat, userId }) => {
 
   return (
     <li className={className} onClick={handleClick}>
-      {chat.users.filter((u) => u.id !== userId)[0]?.username}
+      {chat.users?.filter((u) => u.id !== userId)[0]?.username}
     </li>
   );
 };

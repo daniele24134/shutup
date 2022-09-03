@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import styled from 'styled-components';
 import ChatItem from './ChatItem';
@@ -23,9 +23,15 @@ const ChatList: React.FC<ChatLisType> = ({ className, userId }) => {
     return () => socket.off('receive-chat');
   }, [socket]);
 
-  const chatlist = user.chats?.map((chat) => {
-    return <ChatItem key={chat.id} chat={chat} userId={userId} />;
-  });
+  let chatlist = user.chats?.map((chat) => <ChatItem key={chat.id} chat={chat} userId={userId} />);
+
+  useEffect(() => {
+    console.log(user.chats)
+    chatlist = user.chats?.map((chat) => {
+      return <ChatItem key={chat.id} chat={chat} userId={userId} />;
+    });
+  }, [user.chats])
+
 
   const nochat = <div>You have no chat yet</div>;
 

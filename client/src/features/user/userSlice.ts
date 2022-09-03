@@ -54,6 +54,10 @@ export const userSlice = createSlice({
     addChat: (state, action: PayloadAction<ChatType>) => {
       state.value.chats?.push(action.payload);
     },
+    unshiftChat: (state, action: PayloadAction<ChatType>) => {
+      state.value.chats = state.value.chats?.filter(chat => chat.id !== action.payload.id);
+      state.value.chats?.unshift(action.payload);
+    },
     deleteChat: (state, action: PayloadAction<string>) => {
       state.value.chats = state.value.chats?.filter(
         (c) => c.id !== action.payload
@@ -62,7 +66,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { logout, addChat, deleteChat, login } = userSlice.actions;
+export const { logout, addChat, deleteChat, login, unshiftChat } = userSlice.actions;
 export const isLogged = (state: RootState) => state.user.isLogged;
 export const currentUser = (state: RootState) => state.user.value;
 export const userReducer = userSlice.reducer;

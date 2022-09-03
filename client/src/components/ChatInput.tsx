@@ -2,6 +2,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ClassNameType, MessageType } from '../@types';
 import { useAppDispatch } from '../app/hooks';
+import { unshiftChat } from '../features/user/userSlice';
 import { receiveMessage, sendMessage, socket } from '../services/socketService';
 
 interface ChatInputProps extends ClassNameType {
@@ -21,6 +22,8 @@ const ChatInput: React.FC<ChatInputProps> = ({
     if (!socket) return;
     socket.on('receive-message', (message: MessageType) => {
       receiveMessage(dispatch, message);
+      console.log(message.chat)
+      dispatch(unshiftChat(message.chat!))
     });
 
     return () => socket.off('receive-message');
